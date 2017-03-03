@@ -13,9 +13,22 @@ import urllib
 import matplotlib.pyplot as plt
 from geopy.distance import vincenty
 from collections import defaultdict
+import configparser
+import folium
+import json
+
+# Manage the API keys in a separate .ini file.
+APIKEYS = configparser.ConfigParser()
+APIKEYS.read('../APIKeys.ini');
+
+# Get the keyname (client_id?) and actual API key.
+keyname = APIKEYS['opendata']['keyname']
+thekey = APIKEYS['opendata']['key']
+
+# Generate the correct API call.
+schfile = "https://data.cityofnewyork.us/resource/9pyc-nsiu.json?$limit=100000&$$" + keyname + "=" + thekey + "&$order=ats_system_code"
 
 # Get school locations from NYC OpenData API
-
 schresp  = urllib.request.urlopen(schfile).read()
 sch_data = pd.read_json(schresp)
 
@@ -32,13 +45,10 @@ sch = sch[sch['longitude']   != 0]
 # Also want CSD schools and not district 75 (special ed)
 sch = sch[sch['administrative_district_code'] < 40]
 
-print("Done here.")
-
 
 # In[13]:
 
-import folium
-import json
+
 
 
 # In[23]:

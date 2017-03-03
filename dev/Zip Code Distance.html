@@ -11768,9 +11768,22 @@ div#notebook {
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">geopy.distance</span> <span class="k">import</span> <span class="n">vincenty</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span>
+<span class="kn">import</span> <span class="nn">configparser</span>
+<span class="kn">import</span> <span class="nn">folium</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="c1"># Manage the API keys in a separate .ini file.</span>
+<span class="n">APIKEYS</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+<span class="n">APIKEYS</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;../APIKeys.ini&#39;</span><span class="p">);</span>
+
+<span class="c1"># Get the keyname (client_id?) and actual API key.</span>
+<span class="n">keyname</span> <span class="o">=</span> <span class="n">APIKEYS</span><span class="p">[</span><span class="s1">&#39;opendata&#39;</span><span class="p">][</span><span class="s1">&#39;keyname&#39;</span><span class="p">]</span>
+<span class="n">thekey</span> <span class="o">=</span> <span class="n">APIKEYS</span><span class="p">[</span><span class="s1">&#39;opendata&#39;</span><span class="p">][</span><span class="s1">&#39;key&#39;</span><span class="p">]</span>
+
+<span class="c1"># Generate the correct API call.</span>
+<span class="n">schfile</span> <span class="o">=</span> <span class="s2">&quot;https://data.cityofnewyork.us/resource/9pyc-nsiu.json?$limit=100000&amp;$$&quot;</span> <span class="o">+</span> <span class="n">keyname</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">+</span> <span class="n">thekey</span> <span class="o">+</span> <span class="s2">&quot;&amp;$order=ats_system_code&quot;</span>
 
 <span class="c1"># Get school locations from NYC OpenData API</span>
-
 <span class="n">schresp</span>  <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">schfile</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="n">sch_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="n">schresp</span><span class="p">)</span>
 
@@ -11786,8 +11799,6 @@ div#notebook {
 
 <span class="c1"># Also want CSD schools and not district 75 (special ed)</span>
 <span class="n">sch</span> <span class="o">=</span> <span class="n">sch</span><span class="p">[</span><span class="n">sch</span><span class="p">[</span><span class="s1">&#39;administrative_district_code&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">40</span><span class="p">]</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done here.&quot;</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -11814,8 +11825,7 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">folium</span>
-<span class="kn">import</span> <span class="nn">json</span>
+<div class=" highlight hl-ipython3"><pre><span></span> 
 </pre></div>
 
 </div>
